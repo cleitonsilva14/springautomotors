@@ -1,0 +1,13 @@
+http://localhost:9000/api/v1/carro
+
+http POST http://localhost:9000/api/v1/carro \
+    marca="Kia" \
+    modelo="Sportage" \
+    placa="JEE1A77" \
+    km=22.900 \
+    preco=100.000 \
+    cambio="AUTOMATICO" \
+    combustivel="FLEX" \
+    ano=2022 \
+    cor="vermelho"
+

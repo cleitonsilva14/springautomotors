@@ -6,6 +6,10 @@ import br.com.springautomotors.exception.PlacaUnicaViolationException;
 import br.com.springautomotors.mapper.CarroMapper;
 import br.com.springautomotors.model.Carro;
 import br.com.springautomotors.service.CarroService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +26,22 @@ import java.util.List;
 public class CarroController {
 
     private final CarroService carroService;
+
+    @Operation(
+            summary = "Obter todos os carros cadastrados", description = "Recurso responsável para obter todos os carros!",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Carros encontrados!",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = Carro.class
+                                    )
+                            )
+                    )
+            }
+    )
 
     @GetMapping
     public ResponseEntity<List<Carro>> getAll(){

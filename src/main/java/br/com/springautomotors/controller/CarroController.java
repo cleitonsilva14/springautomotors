@@ -3,6 +3,7 @@ package br.com.springautomotors.controller;
 
 import br.com.springautomotors.dto.CarroDto;
 import br.com.springautomotors.exception.PlacaUnicaViolationException;
+import br.com.springautomotors.handler.ApiErrorMessage;
 import br.com.springautomotors.mapper.CarroMapper;
 import br.com.springautomotors.model.Carro;
 import br.com.springautomotors.service.CarroService;
@@ -44,22 +45,38 @@ public class CarroController {
                     )
             }
     )
-
     @GetMapping
     public ResponseEntity<List<Carro>> getAll(){
-
         return ResponseEntity.status(HttpStatus.OK).body(carroService.findAll());
-
     }
 
+
+    @Operation(
+            summary = "Criar um novo carro", description = "Recurso responsável por criar um novo carro",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Criado com sucesso!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CarroDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Placa já está cadastrada",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "Erro ao tentar processar os dados enviados, pois estão inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorMessage.class))
+                    )
+
+
+            }
+    )
     @PostMapping
     public ResponseEntity<CarroDto> save(@RequestBody @Valid CarroDto carroDto){
-
-
             var carro = carroService.saveCar(CarroMapper.toCarro(carroDto));
             return ResponseEntity.status(HttpStatus.CREATED).body(CarroMapper.toDto(carro));
-
-
     }
 
 

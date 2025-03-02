@@ -15,13 +15,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Tag(name = "Carros", description = "Operações relacionadas a carros")
 @RestController
 @RequiredArgsConstructor
@@ -69,14 +72,29 @@ public class CarroController {
                             description = "Erro ao tentar processar os dados enviados, pois estão inválidos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorMessage.class))
                     )
-
-
             }
     )
     @PostMapping
     public ResponseEntity<CarroDto> save(@RequestBody @Valid CarroDto carroDto){
             var carro = carroService.saveCar(CarroMapper.toCarro(carroDto));
             return ResponseEntity.status(HttpStatus.CREATED).body(CarroMapper.toDto(carro));
+    }
+
+
+    @PostMapping("/all")
+    public ResponseEntity<?> saveAll(@RequestBody @Valid List<CarroDto> carroDtoList){
+        //carroDtoList.stream().map((carroDto) -> CarroMapper.toCarro(carroDto)).forEach(System.out::println);
+
+        List<Carro> carrosList = carroDtoList
+                .stream()
+                .map((carroDto) -> CarroMapper.toCarro(carroDto))
+                .toList();
+
+        //log.info("\033[31m{}\033[m", carrosList);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(carroService.saveAll(carrosList));
     }
 
 

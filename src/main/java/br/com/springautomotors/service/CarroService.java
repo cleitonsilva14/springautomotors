@@ -30,4 +30,12 @@ public class CarroService {
             throw new PlacaUnicaViolationException(String.format("Placa [%s] já está cadastrada", carro.getPlaca()));
         }
     }
+
+    public List<Carro> saveAll(List<Carro> carrosList) {
+        try {
+            return carroRepository.saveAll(carrosList);
+        } catch (DataIntegrityViolationException exception) {
+            throw new PlacaUnicaViolationException("Placa já está cadastrada");
+        }
+    }
 }

@@ -38,4 +38,8 @@ public class CarroService {
             throw new PlacaUnicaViolationException("Placa já está cadastrada");
         }
     }
+
+    public List<String> findAllPlaca() {
+        return carroRepository.findAllPlaca();
+    }
 }

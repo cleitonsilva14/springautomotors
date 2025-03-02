@@ -28,7 +28,7 @@ import java.util.List;
 @Tag(name = "Carros", description = "Operações relacionadas a carros")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/carro")
+@RequestMapping("/api/v1/carros")
 public class CarroController {
 
     private final CarroService carroService;
@@ -78,6 +78,27 @@ public class CarroController {
     public ResponseEntity<CarroDto> save(@RequestBody @Valid CarroDto carroDto){
             var carro = carroService.saveCar(CarroMapper.toCarro(carroDto));
             return ResponseEntity.status(HttpStatus.CREATED).body(CarroMapper.toDto(carro));
+    }
+
+    @Operation(
+            summary = "Obter todas as placas",
+            description = "Recurso responável por buscar todas as placas de veículos que já estão cadastradas",
+            responses = {
+                    @ApiResponse (
+                            responseCode = "200",
+                            description = "Placas encontradas",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            }
+    )
+
+    @GetMapping("/placas")
+    public ResponseEntity<List<String>> findAllPlacas(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(carroService.findAllPlaca());
     }
 
 

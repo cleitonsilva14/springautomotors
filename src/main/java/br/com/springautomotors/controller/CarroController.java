@@ -102,6 +102,26 @@ public class CarroController {
     }
 
 
+    @Operation(
+            summary = "Criar novos carros por um lista", description = "Recurso responsável por vários carros de uma vez",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Criado com sucesso!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CarroDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Placa já está cadastrada",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "Erro ao tentar processar os dados enviados, pois estão inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorMessage.class))
+                    )
+            }
+    )
     @PostMapping("/all")
     public ResponseEntity<?> saveAll(@RequestBody @Valid List<CarroDto> carroDtoList){
         //carroDtoList.stream().map((carroDto) -> CarroMapper.toCarro(carroDto)).forEach(System.out::println);
